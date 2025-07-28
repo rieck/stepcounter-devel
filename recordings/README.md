@@ -6,9 +6,9 @@ This directory contains recorded sensor data from step counter experiments. The 
 
 The recordings are organized into subdirectories based on sensor configuration:
 
-- **`l1-12hz/`** - L1 magnitude of sensor at 12Hz sampling rate
-- **`l2-12hz/`** - L2 magnitude of sensor at 12Hz sampling rate  
-- **`l2-25hz/`** - L2 magnitude of sensor at 25Hz sampling rate
+- `l1-12hz/` - L1 magnitude of sensor at 12Hz sampling rate
+- `l2-12hz/` - L2 magnitude of sensor at 12Hz sampling rate  
+- `l2-25hz/` - L2 magnitude of sensor at 25Hz sampling rate
 
 ## File Naming Convention
 
@@ -16,15 +16,15 @@ Each recording file follows the pattern: `{activity}-{footwear}.b64`
 
 ### Activity Types
 
-- **`fast-walking`** - Fast walking motion (higher intensity steps)
-- **`normal-walking`** - Normal walking pace (typical daily walking)
-- **`slow-walking`** - Slow walking motion (lower intensity steps)
-- **`pc-working`** - Desk work activities (sitting and typing)
+- `fast-walking` - Fast walking motion (higher intensity steps)
+- `normal-walking` - Normal walking pace (typical daily walking)
+- `slow-walking` - Slow walking motion (lower intensity steps)
+- `pc-working` - Desk work activities (sitting and typing)
 
 ### Footwear Types
 
-- **`bf`** - Bare feet 😂
-- **`sh`** - Shoes
+- `bf` - Bare feet 😂
+- `sh` - Shoes
 
 ## Data Format
 
@@ -62,8 +62,8 @@ Removes temporary log files from the sensor device.
 
 This dataset enables research on:
 
-- **Step Detection Accuracy**: Compare L1 vs L2 magnitude effectiveness
-- **Sampling Rate Impact**: Analyze 12Hz vs 25Hz performance
-- **Footwear Effects**: Study bare feet vs shoes on detection
-- **Activity Classification**: Generalization across activity types
-- **Algorithm Optimization**: Develop robust step counting algorithms
+- Step Detection Accuracy: Compare L1 vs L2 magnitude effectiveness
+- Sampling Rate Impact: Analyze 12Hz vs 25Hz performance
+- Footwear Effects: Study bare feet vs shoes on detection
+- Activity Classification: Generalization across activity types
+- Algorithm Optimization: Develop robust step counting algorithms
