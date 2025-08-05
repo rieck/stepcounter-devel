@@ -254,14 +254,14 @@ def export_readings(header, readings, steps, args):
 
         # Set headers based on data type
         if header["data_type"] & 0x01:
-            headers = ["Timestamp", "X", "Y", "Z", "Steps"]
+            headers = ["Timestamp", "X", "Y", "Z", "Steps", "Header"]
         else:
-            headers = ["Timestamp", "Magnitude", "Steps"]
+            headers = ["Timestamp", "Magnitude", "Steps", "Header"]
         writer.writerow(headers)
 
-        # Write first row with total steps, remaining rows with 0 steps
-        writer.writerow(list(readings[0]) + [steps])
-        writer.writerows(list(reading) + [0] for reading in readings[1:])
+        # Write first row with steps and header, remaining rows without
+        writer.writerow(list(readings[0]) + [steps, header])
+        writer.writerows(list(reading) + [0, ""] for reading in readings[1:])
 
 
 def main():
