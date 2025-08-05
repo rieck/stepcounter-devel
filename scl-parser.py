@@ -151,7 +151,7 @@ def get_rate(header):
         }[header["device_state"]["data_rate"]]
 
 
-def parse_chunk(data, offset, header, index):
+def parse_chunk(data, offset, header, index, args):
     """Parse a single chunk of data"""
     chunk = []
 
@@ -161,7 +161,10 @@ def parse_chunk(data, offset, header, index):
 
     # Get rate and start timestamp
     rate = get_rate(header)
-    ts = header["start_ts"] + index
+    if args.timestamp:
+        ts = header["start_ts"] + index
+    else:
+        ts = index
 
     for i in range(count):
         # Parse XYZ coordinates if present
@@ -176,7 +179,8 @@ def parse_chunk(data, offset, header, index):
             reading = [mag_bytes[0] | (mag_bytes[1] << 8) | (mag_bytes[2] << 16)]
             offset += 3
 
-        chunk.append((ts + i / rate, *reading))
+        dts = round(ts + i / rate, 2)
+        chunk.append((dts, *reading))
 
     return chunk, offset
 
@@ -208,17 +212,25 @@ def parse_args():
         "-c", "--csv-export", help="Export to CSV file", type=Path, default=None
     )
 
+    parser.add_argument(
+        "-v", "--verbose", help="Verbose output", action="store_true", default=False
+    )
+
+    parser.add_argument(
+        "-t", "--timestamp", help="Use timestamp", action="store_true", default=False
+    )
+
     return parser.parse_args()
 
 
-def parse_readings(data, offset, header):
+def parse_readings(data, offset, header, args):
     # Parse all data chunks until marker
     readings, index = [], 0
     while offset < len(data):
         marker, offset = check_marker(data, offset)
         if marker:
             break
-        chunk, offset = parse_chunk(data, offset, header, index)
+        chunk, offset = parse_chunk(data, offset, header, index, args)
         readings.extend(chunk)
         index += 1
 
@@ -261,7 +273,7 @@ def export_readings(header, readings, steps, args):
 
         # Write first row with steps and header, remaining rows without
         writer.writerow(list(readings[0]) + [steps, header])
-        writer.writerows(list(reading) + [0, ""] for reading in readings[1:])
+        writer.writerows(list(reading) + ["", ""] for reading in readings[1:])
 
 
 def main():
@@ -279,11 +291,13 @@ def main():
 
     # Parse header and print info
     header, offset = parse_header(data)
-    print_header(header)
+    if args.verbose:
+        print_header(header)
 
     # Parse readings and step count
-    readings, steps = parse_readings(data, offset, header)
-    print_readings(readings, steps)
+    readings, steps = parse_readings(data, offset, header, args)
+    if args.verbose:
+        print_readings(readings, steps)
 
     if args.csv_export:
         export_readings(header, readings, steps, args)
