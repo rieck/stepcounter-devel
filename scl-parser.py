@@ -2,8 +2,9 @@
 """
 Parser for Step Counter Data
 
-This tool parses binary recorded data on the watch for further processing.
+This tool parses binary data from the watch for further processing.
 It supports both raw binary and base64 encoded binary files.
+See stepcounter_logging_face.c in second movement.
 """
 
 import argparse
@@ -264,7 +265,7 @@ def export_readings(header, readings, steps, args):
 
 
 def main():
-    """Parse step counter data from input file and return readings and step count"""
+    """Parse step counter data from input file"""
     args = parse_args()
 
     if not args.input.exists():
