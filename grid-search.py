@@ -15,79 +15,7 @@ import pandas as pd
 from sklearn.model_selection import ParameterGrid
 from tqdm import tqdm
 
-
-class BaseDetector:
-    """Base class for step detection algorithms."""
-
-    def __init__(self, **params):
-        # Initialize detector with parameters
-        self.params = params
-
-    def detect_steps(self, mag_series):
-        # Override in subclasses to implement step detection
-        raise NotImplementedError("Subclasses must implement detect_steps")
-
-    @classmethod
-    def get_param_grid(cls):
-        # Override in subclasses to define parameter grid
-        return {}
-
-
-class RandomDetector(BaseDetector):
-    """Random step detector that detects steps with given probability."""
-
-    def __init__(self, prob=0.1, **params):
-        super().__init__(prob=prob, **params)
-        self.prob = prob
-
-    def detect_steps(self, mag_series):
-        # For each point, detect step with probability prob
-        steps = np.random.random(len(mag_series)) < self.prob
-        return int(np.sum(steps))
-
-    @classmethod
-    def get_param_grid(cls):
-        return {"prob": np.logspace(-10, -1, 100)}
-
-
-class BaselineDetector(BaseDetector):
-    """Baseline step detector that returns a number based on sequence length."""
-
-    def __init__(self, scale=0.1, **params):
-        super().__init__(scale=scale, **params)
-        self.scale = scale
-
-    def detect_steps(self, mag_series):
-        # Detect steps based on sequence length
-        return max(0, int(len(mag_series) * self.scale))
-
-    @classmethod
-    def get_param_grid(cls):
-        return {"scale": np.logspace(-10, -1, 100)}
-
-
-class ThresholdDetector(BaseDetector):
-    """Threshold detector that counts steps above a magnitude threshold."""
-
-    def __init__(self, threshold=1000, **params):
-        super().__init__(threshold=threshold, **params)
-        self.threshold = threshold
-
-    def detect_steps(self, mag_series):
-        # Count steps above threshold
-        return int(np.sum(mag_series > self.threshold))
-
-    @classmethod
-    def get_param_grid(cls):
-        return {"threshold": np.logspace(2, 5, 100)}
-
-
-# Detector registry
-detectors = {
-    "baseline": BaselineDetector,
-    "random": RandomDetector,
-    "threshold": ThresholdDetector,
-}
+from algorithms.registry import detectors
 
 
 class StepEvaluator:
@@ -101,7 +29,10 @@ class StepEvaluator:
     def _get_detector_class(self):
         # Get the detector class based on name
         if self.algo_name not in detectors:
-            raise ValueError(f"Unknown algorithm: {self.algo_name}")
+            available = list(detectors.keys())
+            raise ValueError(
+                f"Unknown algorithm: {self.algo_name}. Available: {available}"
+            )
 
         return detectors[self.algo_name]
 
@@ -188,7 +119,7 @@ def parse_args():
         "--algorithm",
         type=str,
         default="baseline",
-        help="Algorithm name (default: baseline)",
+        help=f"Algorithm name (default: baseline). Available: {list(detectors.keys())}",
     )
     parser.add_argument(
         "-o",
