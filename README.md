@@ -76,18 +76,17 @@ python calibrate.py -d recordings/l2-25hz threshold
 
 | Algorithm | Calibration Error | Evaluation Error | Best Params 1 | Best Params 2 |
 |-----------|------------------|------------------|---------------|---------------|
-| threshold_edge | 22.70 | 24.20 | `{'min_step': 1, 'threshold': 26606}` | `{'min_step': 1, 'threshold': 26323}` |
-| threshold_bound | 19.60 | 24.80 | `{'max_step': 17, 'min_step': 1, 'threshold': 26367}` | `{'max_step': 15, 'min_step': 3, 'threshold': 25469}` |
-| threshold_hp | 22.10 | 26.60 | `{'threshold': 6868, 'win_size': 82}` | `{'threshold': 6373, 'win_size': 8}` |
-| threshold_min | 15.90 | 29.50 | `{'min_step': 3, 'threshold': 27666}` | `{'min_step': 3, 'threshold': 26181}` |
-| threshold_ultra | 16.80 | 30.40 | `{'max_step': 0, 'min_step': 0, 'threshold': 3000, 'win_hp': 10, 'win_lp': 1}` | `{'max_step': 23, 'min_step': 4, 'threshold': 1500, 'win_hp': 3, 'win_lp': 10}` |
-| peak_detect | 45.80 | 48.50 | `{'bounce_win': 3, 'detect_win': 100, 'mean_win': 3, 'thres': 1.08}` | `{'bounce_win': 3, 'detect_win': 100, 'mean_win': 31, 'thres': 1.08}` |
-| threshold_max | 31.90 | 57.60 | `{'max_step': 8, 'threshold': 33888}` | `{'max_step': 11, 'threshold': 30666}` |
-| threshold | 32.60 | 58.70 | `{'threshold': 34545}` | `{'threshold': 31111}` |
-| threshold_lp | 33.20 | 65.60 | `{'threshold': 31636, 'win_size': 4}` | `{'threshold': 31030, 'win_size': 1}` |
+| **threshold_hp** | 23.10 | **23.40** | `{'threshold': 6727, 'win_size': 100}` | `{'threshold': 6515, 'win_size': 7}` |
+| **threshold_edge** | 22.70 | **24.20** | `{'min_step': 1, 'threshold': 26606}` | `{'min_step': 1, 'threshold': 26323}` |
+| **threshold_bound** | 19.50 | **24.50** | `{'max_step': 18, 'min_step': 1, 'threshold': 26444}` | `{'max_step': 15, 'min_step': 3, 'threshold': 25666}` |
+| **threshold_min** | 15.90 | **29.50** | `{'min_step': 3, 'threshold': 27666}` | `{'min_step': 3, 'threshold': 26181}` |
+| **threshold_ultra** | 14.70 | **31.50** | `{'max_step': 12, 'min_step': 2, 'threshold': 2454, 'win_hp': 4, 'win_lp': 18}` | `{'max_step': 16, 'min_step': 4, 'threshold': 1161, 'win_hp': 4, 'win_lp': 6}` |
+| **peak_detect** | 42.30 | **46.20** | `{'bounce_win': 4, 'detect_win': 100, 'mean_win': 1, 'thres': 1.0}` | `{'bounce_win': 4, 'detect_win': 100, 'mean_win': 7, 'thres': 1.0}` |
+| **threshold_max** | 31.90 | **57.60** | `{'max_step': 8, 'threshold': 33888}` | `{'max_step': 11, 'threshold': 30666}` |
+| **threshold** | 32.60 | **58.70** | `{'threshold': 34545}` | `{'threshold': 31111}` |
+| **threshold_lp** | 33.20 | **65.60** | `{'threshold': 31636, 'win_size': 4}` | `{'threshold': 31030, 'win_size': 1}` |
 
-
-Calibration results are stored in [`results.yml`](results.yml). Currently, the `threshold_bound` algorithm achieves the best balance of accuracy and efficiency, demonstrating the lowest evaluation error while maintaining a lightweight implementation.
+Calibration results are stored in [`results.yml`](results.yml). Currently, the `threshold_edge` algorithm achieves the best balance of accuracy and stability, demonstrating a low evaluation error while having stable parameters.
 
 ## Runtime Analysis
 
