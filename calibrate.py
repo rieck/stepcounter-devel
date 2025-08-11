@@ -131,6 +131,41 @@ def eval_algo(algo_name, data, params):
     }
 
 
+def calibrate_algorithm(algorithm, calib_data):
+    """Calibrate algorithm parameters using grid search and parallel evaluation"""
+    param_grid = get_param_grid(algorithm)
+    best_params = None
+    best_error = float("inf")
+
+    # Parallel evaluation with progress bar
+    with ProcessPoolExecutor() as executor:
+        # Submit all parameter combinations for evaluation
+        future_to_params = {
+            executor.submit(eval_algo, algorithm, calib_data, params): params
+            for params in param_grid
+        }
+
+        # Process completed evaluations with progress bar
+        for future in tqdm(
+            as_completed(future_to_params),
+            total=len(param_grid),
+            desc=f"Calibrating {algorithm}",
+            leave=False,
+        ):
+            params = future_to_params[future]
+            try:
+                results = future.result()
+
+                if results["error_mean"] < best_error:
+                    best_error = results["error_mean"]
+                    best_params = params
+            except Exception as e:
+                print(f"Error evaluating parameters {params}: {e}")
+                continue
+
+    return best_params, best_error
+
+
 def main():
     """Main function"""
     args = parse_args()
@@ -138,42 +173,18 @@ def main():
 
     # Loop through all algorithms
     for algorithm in args.algorithms:
-        param_grid = get_param_grid(algorithm)
-        best_params = None
-        best_error = float("inf")
+        best_params1, best_error1 = calibrate_algorithm(algorithm, calib_data)
+        results1 = eval_algo(algorithm, eval_data, best_params1)
+        best_params2, best_error2 = calibrate_algorithm(algorithm, eval_data)
+        results2 = eval_algo(algorithm, calib_data, best_params2)
 
-        # Parallel evaluation with progress bar
-        with ProcessPoolExecutor() as executor:
-            # Submit all parameter combinations for evaluation
-            future_to_params = {
-                executor.submit(eval_algo, algorithm, calib_data, params): params
-                for params in param_grid
-            }
+        best_error = (best_error1 + best_error2) / 2
+        error_mean = (results1["error_mean"] + results2["error_mean"]) / 2
 
-            # Process completed evaluations with progress bar
-            for future in tqdm(
-                as_completed(future_to_params),
-                total=len(param_grid),
-                desc=f"Calibrating {algorithm}",
-                leave=False,
-            ):
-                params = future_to_params[future]
-                try:
-                    results = future.result()
-
-                    if results["error_mean"] < best_error:
-                        best_error = results["error_mean"]
-                        best_params = params
-                except Exception as e:
-                    print(f"Error evaluating parameters {params}: {e}")
-                    continue
-
-        # Evaluate best parameters on evaluation data
-        results = eval_algo(algorithm, eval_data, best_params)
         print(f"- algorithm: {algorithm}")
-        print(f"  best_param: {best_params}")
+        print(f"  best_param: {best_params1} {best_params2}")
         print(f"  calib_error: {best_error:.2f}")
-        print(f"  eval_error: {results['error_mean']:.2f}")
+        print(f"  eval_error: {error_mean:.2f}")
 
 
 if __name__ == "__main__":

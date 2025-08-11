@@ -8,7 +8,7 @@ import numpy as np
 from .base import BaseDetector
 
 
-class ThresholdBound2(BaseDetector):
+class ThresholdBound(BaseDetector):
     """Threshold detector with bounded step size"""
 
     def __init__(self, threshold=100, min_step=10, max_step=10, **params):
