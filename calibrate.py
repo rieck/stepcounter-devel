@@ -183,7 +183,7 @@ def main():
         error_mean = (results1["error_mean"] + results2["error_mean"]) / 2
 
         print(f"- algorithm: {algorithm}")
-        print(f"  best_param: {best_params1} {best_params2}")
+        print(f"  best_param: [{best_params1}, {best_params2}]")
         print(f"  calib_error: {best_error:.2f}")
         print(f"  eval_error: {error_mean:.2f}")
 
