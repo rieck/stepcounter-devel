@@ -74,6 +74,18 @@ python calibrate.py -d recordings/l2-25hz threshold
 
 #### Calibration Results
 
+| Algorithm | Calibration Error | Evaluation Error | Best Parameters |
+|-----------|-------------------|------------------|-----------------|
+| threshold_bound | 16.60 | 26.20 | max_step: 36, min_step: 3, threshold: 27666 |
+| threshold_hp | 20.40 | 27.40 | threshold: 6868, win_size: 82 |
+| threshold_min | 18.00 | 27.20 | min_step: 3, threshold: 27666 |
+| threshold_ultra | 15.80 | 29.40 | max_step: 0, min_step: 0, threshold: 3000, win_hp: 10, win_lp: 1 |
+| peak_detect | 52.00 | 40.80 | bounce_win: 3, detect_win: 100, mean_win: 3, thres: 1.08 |
+| threshold_max | 36.20 | 61.20 | max_step: 8, threshold: 33888 |
+| threshold | 37.00 | 65.00 | threshold: 34545 |
+| threshold_lp | 38.20 | 77.40 | threshold: 31636, win_size: 4 |
+
+
 Calibration results are stored in [`results.yml`](results.yml). Currently, the `threshold_bound` algorithm achieves the best balance of accuracy and efficiency, demonstrating the lowest evaluation error while maintaining a lightweight implementation.
 
 ## Runtime Analysis
