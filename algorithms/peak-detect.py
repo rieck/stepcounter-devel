@@ -89,5 +89,5 @@ class PeakDetect(BaseDetector):
             "mean_win": np.unique(np.logspace(0, 2, 5).astype(int)),
             "detect_win": np.unique(np.logspace(0, 2, 5).astype(int)),
             "bounce_win": np.unique(np.logspace(0, 2, 5).astype(int)),
-            "thres": np.linspace(1.0, 3.0, 25),
+            "thres": np.round(np.linspace(1.0, 3.0, 25), 2),
         }

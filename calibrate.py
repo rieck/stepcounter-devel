@@ -76,21 +76,21 @@ def parse_args():
 def load_data(data_dir):
     """Load data into memory"""
     split = json.load(open(data_dir / "split.json", "r"))
-    calib_data, eval_data = [], []
+    set1_data, set2_data = [], []
 
-    for fname in split["calibration"]:
+    for fname in split["set1"]:
         data = pd.read_csv(data_dir / fname)
         true_steps = int(data.iloc[0]["Steps"])
         mag_series = data["Magnitude"].astype(float)
-        calib_data.append((mag_series, true_steps, fname))
+        set1_data.append((mag_series, true_steps, fname))
 
-    for fname in split["evaluation"]:
+    for fname in split["set2"]:
         data = pd.read_csv(data_dir / fname)
         true_steps = int(data.iloc[0]["Steps"])
         mag_series = data["Magnitude"].astype(float)
-        eval_data.append((mag_series, true_steps, fname))
+        set2_data.append((mag_series, true_steps, fname))
 
-    return calib_data, eval_data
+    return set1_data, set2_data
 
 
 def get_param_grid(algo_name):
@@ -169,14 +169,15 @@ def calibrate_algorithm(algorithm, calib_data):
 def main():
     """Main function"""
     args = parse_args()
-    calib_data, eval_data = load_data(args.data_dir)
+    set1_data, set2_data = load_data(args.data_dir)
 
     # Loop through all algorithms
     for algorithm in args.algorithms:
-        best_params1, best_error1 = calibrate_algorithm(algorithm, calib_data)
-        results1 = eval_algo(algorithm, eval_data, best_params1)
-        best_params2, best_error2 = calibrate_algorithm(algorithm, eval_data)
-        results2 = eval_algo(algorithm, calib_data, best_params2)
+        # Mini cross-validation
+        best_params1, best_error1 = calibrate_algorithm(algorithm, set1_data)
+        results1 = eval_algo(algorithm, set2_data, best_params1)
+        best_params2, best_error2 = calibrate_algorithm(algorithm, set2_data)
+        results2 = eval_algo(algorithm, set1_data, best_params2)
 
         best_error = (best_error1 + best_error2) / 2
         error_mean = (results1["error_mean"] + results2["error_mean"]) / 2
