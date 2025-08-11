@@ -57,13 +57,3 @@ echo "rm log.scl" > /dev/cu.usbmodem224201
 ```
 
 Removes temporary log files from the sensor device.
-
-## Research Applications
-
-This dataset enables research on:
-
-- Step Detection Accuracy: Compare L1 vs L2 magnitude effectiveness
-- Sampling Rate Impact: Analyze 12Hz vs 25Hz performance
-- Footwear Effects: Study bare feet vs shoes on detection
-- Activity Classification: Generalization across activity types
-- Algorithm Optimization: Develop robust step counting algorithms
