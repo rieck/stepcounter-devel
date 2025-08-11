@@ -1,0 +1,37 @@
+- algorithm: peak_detect
+  best_param: {'bounce_win': 3, 'detect_win': 100, 'mean_win': 3, 'thres': 1.0833333333333333}
+  calib_error: 52.00
+  eval_error: 40.80
+(stepcounter) rieck@compute1:~/tmp/stepcounter-devel$ ./calibrate.py all
+- algorithm: threshold_lp
+  best_param: {'threshold': 31636, 'win_size': 4}
+  calib_error: 38.20
+  eval_error: 77.40
+- algorithm: threshold_ultra
+  best_param: {'max_step': 0, 'min_step': 0, 'threshold': 3000, 'win_hp': 10, 'win_lp': 1}
+  calib_error: 15.80
+  eval_error: 29.40
+- algorithm: threshold
+  best_param: {'threshold': 34545}
+  calib_error: 37.00
+  eval_error: 65.00
+- algorithm: peak_detect
+  best_param: {'bounce_win': 3, 'detect_win': 100, 'mean_win': 3, 'thres': 1.0833333333333333}
+  calib_error: 52.00
+  eval_error: 40.80
+- algorithm: threshold_bound
+  best_param: {'max_step': 36, 'min_step': 3, 'threshold': 27666}
+  calib_error: 16.60
+  eval_error: 26.20
+- algorithm: threshold_max
+  best_param: {'max_step': 8, 'threshold': 33888}
+  calib_error: 36.20
+  eval_error: 61.20
+- algorithm: threshold_hp
+  best_param: {'threshold': 6868, 'win_size': 82}
+  calib_error: 20.40
+  eval_error: 27.40
+- algorithm: threshold_min
+  best_param: {'min_step': 3, 'threshold': 27666}
+  calib_error: 18.00
+  eval_error: 27.20
