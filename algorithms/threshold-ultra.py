@@ -67,9 +67,9 @@ class ThresholdUltra(BaseDetector):
     @classmethod
     def get_param_grid(cls):
         return {
-            "threshold": np.linspace(1000, 5000, 25).astype(int),
-            "max_step": np.linspace(0, 30, 10).astype(int),
+            "threshold": np.linspace(1000, 5000, 100).astype(int),
+            "max_step": np.linspace(0, 30, 30).astype(int),
             "min_step": np.linspace(0, 4, 4).astype(int),
-            "win_lp": np.unique(np.logspace(0, 2, 5).astype(int)),
-            "win_hp": np.unique(np.logspace(0, 2, 5).astype(int)),
+            "win_lp": np.unique(np.logspace(0, 2, 20).astype(int)),
+            "win_hp": np.unique(np.logspace(0, 2, 20).astype(int)),
         }

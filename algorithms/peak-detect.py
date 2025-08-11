@@ -86,8 +86,8 @@ class PeakDetect(BaseDetector):
     @classmethod
     def get_param_grid(cls):
         return {
-            "mean_win": np.unique(np.logspace(0, 2, 5).astype(int)),
-            "detect_win": np.unique(np.logspace(0, 2, 5).astype(int)),
-            "bounce_win": np.unique(np.logspace(0, 2, 5).astype(int)),
-            "thres": np.round(np.linspace(1.0, 3.0, 25), 2),
+            "mean_win": np.unique(np.logspace(0, 2, 10).astype(int)),
+            "detect_win": np.unique(np.logspace(0, 2, 10).astype(int)),
+            "bounce_win": np.unique(np.logspace(0, 2, 10).astype(int)),
+            "thres": np.round(np.linspace(1.0, 3.0, 25), 10),
         }

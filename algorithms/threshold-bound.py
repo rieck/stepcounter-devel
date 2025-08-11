@@ -50,7 +50,7 @@ class ThresholdBound(BaseDetector):
     @classmethod
     def get_param_grid(cls):
         return {
-            "threshold": np.linspace(23000, 34000, 50).astype(int),
+            "threshold": np.linspace(23000, 34000, 100).astype(int),
             "max_step": np.linspace(1, 40, 40).astype(int),
             "min_step": np.linspace(1, 10, 10).astype(int),
         }

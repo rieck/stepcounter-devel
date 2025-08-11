@@ -10,6 +10,7 @@ Copyright (c) 2025 Konrad Rieck. MIT License
 
 import argparse
 import json
+import random
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
@@ -47,6 +48,13 @@ def parse_args():
         metavar="<dir>",
         default=Path("recordings/l2-12hz"),
         help="Directory with recordings (default: recordings/l2-12hz)",
+    )
+    parser.add_argument(
+        "-c",
+        "--max-combi",
+        type=int,
+        default=20000,
+        help="Maximum number of combinations (default: 20000)",
     )
     parser.add_argument(
         "algorithms",
@@ -93,7 +101,7 @@ def load_data(data_dir):
     return set1_data, set2_data
 
 
-def get_param_grid(algo_name):
+def get_param_grid(algo_name, max_combi):
     """Get parameter grid for the specified algorithm"""
     detector_class = detectors[algo_name]
     param_grid = detector_class.get_param_grid()
@@ -103,6 +111,11 @@ def get_param_grid(algo_name):
     for params in ParameterGrid(param_grid):
         converted_params = convert_numpy_types(params)
         converted_grid.append(converted_params)
+
+    # Limit grid
+    if len(converted_grid) > max_combi:
+        converted_grid = random.sample(converted_grid, max_combi)
+
     return converted_grid
 
 
@@ -131,9 +144,9 @@ def eval_algo(algo_name, data, params):
     }
 
 
-def calibrate_algorithm(algorithm, calib_data):
+def calibrate_algorithm(algorithm, calib_data, max_combi):
     """Calibrate algorithm parameters using grid search and parallel evaluation"""
-    param_grid = get_param_grid(algorithm)
+    param_grid = get_param_grid(algorithm, max_combi)
     best_params = None
     best_error = float("inf")
 
@@ -174,9 +187,13 @@ def main():
     # Loop through all algorithms
     for algorithm in args.algorithms:
         # Mini cross-validation
-        best_params1, best_error1 = calibrate_algorithm(algorithm, set1_data)
+        best_params1, best_error1 = calibrate_algorithm(
+            algorithm, set1_data, args.max_combi
+        )
         results1 = eval_algo(algorithm, set2_data, best_params1)
-        best_params2, best_error2 = calibrate_algorithm(algorithm, set2_data)
+        best_params2, best_error2 = calibrate_algorithm(
+            algorithm, set2_data, args.max_combi
+        )
         results2 = eval_algo(algorithm, set1_data, best_params2)
 
         best_error = (best_error1 + best_error2) / 2
