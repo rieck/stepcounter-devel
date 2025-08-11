@@ -5,17 +5,24 @@ import numpy as np
 from .base import BaseDetector
 
 
-class ThresholdDetector(BaseDetector):
-    """Threshold detector that counts steps above a magnitude threshold."""
+class Threshold(BaseDetector):
+    """Static threshold detector that counts steps above a magnitude threshold."""
 
-    def __init__(self, threshold=1000, **params):
-        super().__init__(threshold=threshold, **params)
+    def __init__(self, threshold=100, **params):
+        super().__init__(**params)
         self.threshold = threshold
 
-    def detect_steps(self, mag_series):
-        # Count steps above threshold
-        return int(np.sum(mag_series > self.threshold))
+    def detect_steps(self, x):
+        # Count threshold crossings (transitions from below to above threshold)
+        steps = 0
+        for i in range(0, len(x)):
+            if x[i] > self.threshold:
+                steps += 1
+
+        return steps
 
     @classmethod
     def get_param_grid(cls):
-        return {"threshold": np.logspace(2, 5, 100)}
+        return {
+            "threshold": np.linspace(20000, 40000, 100).astype(int),
+        }

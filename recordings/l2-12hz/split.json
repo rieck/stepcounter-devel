@@ -1,0 +1,16 @@
+{
+    "calibration": [
+        "fast-walking-bf.csv",
+        "normal-walking-sh.csv",
+        "slow-walking-bf.csv",
+        "pc-working1.csv",
+        "pc-working3.csv"
+    ],
+    "evaluation": [
+        "fast-walking-sh.csv",
+        "normal-walking-bf.csv",
+        "slow-walking-sh.csv",
+        "pc-working2.csv",
+        "pc-working4.csv"
+    ]
+}

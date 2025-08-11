@@ -32,8 +32,10 @@ def discover_algorithms():
                     and issubclass(obj, BaseDetector)
                     and obj != BaseDetector
                 ):
-                    # Use the class name as the algorithm name (lowercase)
-                    algo_name = name.lower().replace("detector", "")
+                    # Convert camelcase to lowercase with underscores
+                    algo_name = "".join(
+                        ["_" + c.lower() if c.isupper() else c for c in name]
+                    ).lstrip("_")
                     algorithms[algo_name] = obj
 
         except ImportError as e:
