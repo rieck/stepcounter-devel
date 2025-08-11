@@ -1,16 +1,16 @@
-# Step Counter Development
+# 🏃‍♂️ Step Counter Development
 
-This repository contains tools and experiments for developing a step counting algorithms for SensorWatch. The goal is to experiment with different signal processing approaches to accurately detect steps from accelerometer data of the watch.
+This repository contains tools and experiments for developing a step counting algorithms for [SensorWatch Pro](https://www.sensorwatch.net). The goal is to experiment with different signal processing approaches to accurately detect steps from accelerometer data of the watch.
 
 ## Directory Structure
 
-- **`recordings/`** - Samples of recorded accelerometer data
+- `recordings/` - Samples of recorded accelerometer data
 
-- **`algorithms/`** - Step detection algorithm implementations
+- `algorithms/` - Step detection algorithm implementations
 
-- **`runtime/`** - Runtime performance benchmarks and measurements
+- `runtime/` - Runtime performance benchmarks and measurements
 
-- **`watch_face/`**- Watch face for recording accelerometer data
+- `watch_face/` - Watch face for recording accelerometer data
 
 ## Setup
 
@@ -45,9 +45,9 @@ python parse.py --csv recordings/l2-12hz/normal-walking-sh.b64
 python parse.py --header recordings/l2-12hz/slow-walking-bf.b64
 ```
 
-### Algorithm Calibration
+### Algorithm Analysis
 
-The `calibrate.py` tool performs grid search over parameter spaces to find optimal configurations for step detection algorithms. It automatically splits data into calibration and evaluation sets, leverages parallel processing, and provides support for calibrating multiple algorithms simultaneously using the `all` option.
+The `calibrate.py` tool performs grid search over parameter spaces to find optimal configurations for step detection algorithms so that their performance can be compared. It automatically splits data into calibration and evaluation sets, leverages parallel processing, and provides support for calibrating multiple algorithms simultaneously using the `all` option.
 
 #### Usage
 
@@ -74,11 +74,11 @@ python calibrate.py -d recordings/l2-25hz threshold
 
 #### Calibration Results
 
-Calibration results are stored in [`results.yml`](results.yml). The `threshold_bound` algorithm achieves the best balance of accuracy and efficiency, demonstrating the lowest evaluation error while maintaining a lightweight implementation.
+Calibration results are stored in [`results.yml`](results.yml). Currently, the `threshold_bound` algorithm achieves the best balance of accuracy and efficiency, demonstrating the lowest evaluation error while maintaining a lightweight implementation.
 
 ## Runtime Analysis
 
-The `runtime/` directory contains code for measuring the performance of mathematical operations on device. 
+The `runtime/` directory contains code snippets for measuring the performance of mathematical operations on device.
 
 #### Available Functions
 
@@ -87,4 +87,4 @@ The `runtime/` directory contains code for measuring the performance of mathemat
 
 #### Runtime Results
 
-Benchmarks show that integer operations significantly outperform floating-point calculations on the target device (No surprise, the Cortex M0+ does not have a FP unit). The L1 norm executes approximately 40 times faster than the L2 norm implementation. An approximate L2 norm calculation provides an effective compromise between computational performance and accuracy for the step detection use case. See [`runtime/README.md`](runtime/README.md) for detailed results.
+Benchmarks show that integer operations significantly outperform floating-point calculations on device (No surprise, the ARM Cortex M0+ does not have a FP unit). The L1 norm executes approximately 40 times faster than the L2 norm. An approximate L2 norm calculation provides an effective compromise between computational performance and accuracy for the step detection use case. See [`runtime/README.md`](runtime/README.md) for detailed results.
