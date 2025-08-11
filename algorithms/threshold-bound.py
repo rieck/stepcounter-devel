@@ -1,4 +1,6 @@
-"""Threshold step detector implementation."""
+"""Threshold step detector implementation.
+
+Copyright (c) 2025 Konrad Rieck. MIT License"""
 
 import numpy as np
 

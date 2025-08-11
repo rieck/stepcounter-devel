@@ -5,6 +5,8 @@ Parser for Step Counter Data
 This tool parses binary data from the watch for further processing.
 It supports both raw binary and base64 encoded binary files.
 See stepcounter_logging_face.c in second movement.
+
+Copyright (c) 2025 Konrad Rieck. MIT License
 """
 
 import argparse

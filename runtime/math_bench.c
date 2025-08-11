@@ -1,3 +1,8 @@
+/*
+ * Math benchmark for SensorWatch Pro.
+ * Copyright (c) 2025 Konrad Rieck. MIT License
+ */
+
 #include <math.h>
 
 #define TEST_ITERATIONS 10000

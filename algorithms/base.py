@@ -1,4 +1,7 @@
-"""Base class for step detection algorithms."""
+"""Base class for step detection algorithms.
+
+Copyright (c) 2025 Konrad Rieck. MIT License
+"""
 
 
 class BaseDetector:

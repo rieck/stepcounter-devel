@@ -4,6 +4,8 @@ Calibrate Step Detection Algorithms
 
 This script calibrates step detection algorithms by finding the best
 parameters for a given algorithm.
+
+Copyright (c) 2025 Konrad Rieck. MIT License
 """
 
 import argparse

@@ -1,4 +1,7 @@
-"""Peak detection step detection algorithm."""
+"""Peak detection step detection algorithm.
+
+Copyright (c) 2025 Konrad Rieck. MIT License
+"""
 
 import numpy as np
 

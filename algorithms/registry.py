@@ -1,4 +1,7 @@
-"""Algorithm registry for automatic discovery of step detection algorithms."""
+"""Algorithm registry for automatic discovery of step detection algorithms.
+
+Copyright (c) 2025 Konrad Rieck. MIT License
+"""
 
 import importlib
 import inspect
