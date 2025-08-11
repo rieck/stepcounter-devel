@@ -1,8 +1,3 @@
-- algorithm: peak_detect
-  best_param: {'bounce_win': 3, 'detect_win': 100, 'mean_win': 3, 'thres': 1.0833333333333333}
-  calib_error: 52.00
-  eval_error: 40.80
-(stepcounter) rieck@compute1:~/tmp/stepcounter-devel$ ./calibrate.py all
 - algorithm: threshold_lp
   best_param: {'threshold': 31636, 'win_size': 4}
   calib_error: 38.20
