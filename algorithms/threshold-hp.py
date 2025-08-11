@@ -19,7 +19,7 @@ class ThresholdHp(BaseDetector):
         self.win_size = win_size
 
     def detect_steps(self, x):
-        # Count threshold crossings (transitions from below to above threshold)
+        """Detect steps with high-pass filter."""
         steps = 0
         buffer = deque(maxlen=self.win_size)
 

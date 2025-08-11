@@ -17,7 +17,7 @@ class ThresholdMax(BaseDetector):
         self.max_step = max_step
 
     def detect_steps(self, x):
-        """Detect steps with basic validation against random movement."""
+        """Detect steps with maximum step size."""
         steps = 0
         last_step1 = -1
         last_step2 = last_step1

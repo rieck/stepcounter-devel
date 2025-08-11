@@ -16,7 +16,7 @@ class Threshold(BaseDetector):
         self.threshold = threshold
 
     def detect_steps(self, x):
-        # Count threshold crossings (transitions from below to above threshold)
+        """Detect steps above a magnitude threshold."""
         steps = 0
         for i in range(0, len(x)):
             if x[i] > self.threshold:

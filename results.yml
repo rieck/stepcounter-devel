@@ -15,9 +15,9 @@
   calib_error: 52.00
   eval_error: 40.80
 - algorithm: threshold_bound
-  best_param: {'max_step': 36, 'min_step': 3, 'threshold': 27666}
-  calib_error: 16.60
-  eval_error: 26.20
+  best_param: {'max_step': 17, 'min_step': 1, 'threshold': 26444}
+  calib_error: 23.40
+  eval_error: 19.40
 - algorithm: threshold_max
   best_param: {'max_step': 8, 'threshold': 33888}
   calib_error: 36.20
@@ -30,3 +30,7 @@
   best_param: {'min_step': 3, 'threshold': 27666}
   calib_error: 18.00
   eval_error: 27.20
+- algorithm: threshold_edge
+  best_param: {'min_step': 1, 'threshold': 26606}
+  calib_error: 26.00
+  eval_error: 21.60

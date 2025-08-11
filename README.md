@@ -76,7 +76,8 @@ python calibrate.py -d recordings/l2-25hz threshold
 
 | Algorithm | Calibration Error | Evaluation Error | Best Parameters |
 |-----------|-------------------|------------------|-----------------|
-| threshold_bound | 16.60 | 26.20 | max_step: 36, min_step: 3, threshold: 27666 |
+| threshold_bound | 23.40 | 19.40 | max_step: 17, min_step: 1, threshold: 26444 |
+| threshold_edge | 26.00 | 21.60 | min_step: 1, threshold: 26606 |
 | threshold_hp | 20.40 | 27.40 | threshold: 6868, win_size: 82 |
 | threshold_min | 18.00 | 27.20 | min_step: 3, threshold: 27666 |
 | threshold_ultra | 15.80 | 29.40 | max_step: 0, min_step: 0, threshold: 3000, win_hp: 10, win_lp: 1 |

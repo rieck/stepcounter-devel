@@ -8,8 +8,8 @@ import numpy as np
 from .base import BaseDetector
 
 
-class ThresholdMin(BaseDetector):
-    """Threshold detector with minimum step size"""
+class ThresholdEdge(BaseDetector):
+    """Threshold detector with minimum step size and edge detection."""
 
     def __init__(self, threshold=100, min_step=10, **params):
         super().__init__(**params)
@@ -17,19 +17,21 @@ class ThresholdMin(BaseDetector):
         self.min_step = min_step
 
     def detect_steps(self, x):
-        """Detect steps with minimum step size."""
+        """Detect steps with edge detection."""
         steps = 0
         last_step = -self.min_step
+        above = False
 
         for i in range(0, len(x)):
-            # Skip if step is too small
-            if i - last_step < self.min_step:
-                continue
-
-            # Check for transition
-            if x[i] > self.threshold:
-                steps += 1
-                last_step = i
+            if not above and x[i] > self.threshold:
+                # Rising edge detected
+                if i - last_step >= self.min_step:
+                    steps += 1
+                    last_step = i
+                above = True
+            elif above and x[i] < self.threshold:
+                # Falling edge detected, reset flag
+                above = False
 
         return steps
 
