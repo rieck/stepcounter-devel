@@ -86,7 +86,7 @@ python calibrate.py -d recordings/l2-25hz threshold
 | **threshold** | 32.60 | **58.70** | `{'threshold': 34545}` | `{'threshold': 31111}` |
 | **threshold_lp** | 33.20 | **65.60** | `{'threshold': 31636, 'win_size': 4}` | `{'threshold': 31030, 'win_size': 1}` |
 
-Calibration results are stored in [`results.yml`](results.yml). Currently, the `threshold_edge` algorithm achieves the best balance of accuracy and stability, demonstrating a low evaluation error while having stable parameters.
+Calibration results are stored in [`results.yml`](results.yml).
 
 ## Runtime Analysis
 
