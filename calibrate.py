@@ -63,6 +63,14 @@ def parse_args():
         metavar="<algo>",
         help=f"Algorithms to calibrate. Available: {list(detectors.keys())}",
     )
+    parser.add_argument(
+        "-n",
+        "--nw-mult",
+        type=int,
+        metavar="<int>",
+        default=1,
+        help="Non-walking multiplier (default: 1)",
+    )
 
     args = parser.parse_args()
 
@@ -119,7 +127,7 @@ def get_param_grid(algo_name, max_combi):
     return converted_grid
 
 
-def eval_algo(algo_name, data, params):
+def eval_algo(algo_name, data, params, nw_mult):
     """Evaluate the algorithm on the data with the given parameters"""
     detector_class = detectors[algo_name]
     detector = detector_class(**params)
@@ -136,6 +144,13 @@ def eval_algo(algo_name, data, params):
             }
         )
 
+    if nw_mult > 1:
+        # Multiply non-walking recordings to give them more weight
+        extended_runs = [run for run in runs if "walking" in run["data"]] + [
+            run for run in runs if "walking" not in run["data"] for _ in range(nw_mult)
+        ]
+        runs = extended_runs
+
     return {
         "error_mean": float(np.mean([run["error"] for run in runs])),
         "error_std": float(np.std([run["error"] for run in runs])),
@@ -144,7 +159,7 @@ def eval_algo(algo_name, data, params):
     }
 
 
-def calibrate_algorithm(algorithm, calib_data, max_combi):
+def calibrate_algorithm(algorithm, calib_data, max_combi, nw_mult):
     """Calibrate algorithm parameters using grid search and parallel evaluation"""
     param_grid = get_param_grid(algorithm, max_combi)
     best_params = None
@@ -154,7 +169,7 @@ def calibrate_algorithm(algorithm, calib_data, max_combi):
     with ProcessPoolExecutor() as executor:
         # Submit all parameter combinations for evaluation
         future_to_params = {
-            executor.submit(eval_algo, algorithm, calib_data, params): params
+            executor.submit(eval_algo, algorithm, calib_data, params, nw_mult): params
             for params in param_grid
         }
 
@@ -188,13 +203,13 @@ def main():
     for algorithm in args.algorithms:
         # Mini cross-validation
         best_params1, best_error1 = calibrate_algorithm(
-            algorithm, set1_data, args.max_combi
+            algorithm, set1_data, args.max_combi, args.nw_mult
         )
-        results1 = eval_algo(algorithm, set2_data, best_params1)
+        results1 = eval_algo(algorithm, set2_data, best_params1, args.nw_mult)
         best_params2, best_error2 = calibrate_algorithm(
-            algorithm, set2_data, args.max_combi
+            algorithm, set2_data, args.max_combi, args.nw_mult
         )
-        results2 = eval_algo(algorithm, set1_data, best_params2)
+        results2 = eval_algo(algorithm, set1_data, best_params2, args.nw_mult)
 
         best_error = (best_error1 + best_error2) / 2
         error_mean = (results1["error_mean"] + results2["error_mean"]) / 2
