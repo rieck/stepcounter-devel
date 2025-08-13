@@ -39,5 +39,5 @@ class ThresholdLp(BaseDetector):
     def get_param_grid(cls):
         return {
             "threshold": np.linspace(20000, 32000, 100).astype(int),
-            "win_size": np.unique(np.logspace(0, 2, 10).astype(int)),
+            "win_size": np.unique(np.logspace(0, 2, 20).astype(int)),
         }
