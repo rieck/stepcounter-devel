@@ -3,12 +3,10 @@
 Copyright (c) 2025 Konrad Rieck. MIT License
 """
 
-import numpy as np
-
 from .base import BaseDetector
 
 
-class ThresholdBound(BaseDetector):
+class ThresholdBound8(BaseDetector):
     """Threshold detector with bounded step size"""
 
     def __init__(self, threshold=100, min_step=10, max_step=10, **params):
@@ -24,7 +22,8 @@ class ThresholdBound(BaseDetector):
         last_step2 = last_step1
 
         for i in range(0, len(x)):
-            if x[i] > self.threshold:
+            mag = x[i] // 256
+            if mag > self.threshold:
                 if i - last_step1 >= self.min_step:
                     steps += 1
                     last_step2 = last_step1
@@ -43,7 +42,7 @@ class ThresholdBound(BaseDetector):
     @classmethod
     def get_param_grid(cls):
         return {
-            "threshold": np.linspace(23000, 34000, 100).astype(int),
-            "max_step": np.linspace(1, 40, 40).astype(int),
-            "min_step": np.linspace(1, 10, 10).astype(int),
+            "threshold": [100],  # np.linspace(50, 150, 100).astype(int),
+            "max_step": [20],  # np.linspace(1, 40, 40).astype(int),
+            "min_step": [10],  # np.linspace(1, 10, 10).astype(int),
         }

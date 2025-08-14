@@ -11,7 +11,7 @@ from .base import BaseDetector
 
 
 class ThresholdHp8(BaseDetector):
-    """Threshold detector with high-pass filter (8-bit)."""
+    """Threshold detector with high-pass filter with edge detection (8-bit)."""
 
     def __init__(self, threshold=100, win_size=100, max_dur=10, **params):
         super().__init__(**params)

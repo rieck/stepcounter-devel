@@ -63,14 +63,6 @@ def parse_args():
         metavar="<algo>",
         help=f"Algorithms to calibrate. Available: {list(detectors.keys())}",
     )
-    parser.add_argument(
-        "-n",
-        "--nw-mult",
-        type=int,
-        metavar="<int>",
-        default=1,
-        help="Non-walking multiplier (default: 1)",
-    )
 
     args = parser.parse_args()
 
@@ -127,7 +119,7 @@ def get_param_grid(algo_name, max_combi):
     return converted_grid
 
 
-def eval_algo(algo_name, data, params, nw_mult):
+def eval_algo(algo_name, data, params):
     """Evaluate the algorithm on the data with the given parameters"""
     detector_class = detectors[algo_name]
     detector = detector_class(**params)
@@ -144,22 +136,23 @@ def eval_algo(algo_name, data, params, nw_mult):
             }
         )
 
-    if nw_mult > 1:
-        # Multiply non-walking recordings to give them more weight
-        extended_runs = [run for run in runs if "walking" in run["data"]] + [
-            run for run in runs if "walking" not in run["data"] for _ in range(nw_mult)
-        ]
-        runs = extended_runs
+    walking_error = float(
+        np.mean([run["error"] for run in runs if "walking" in run["data"]])
+    )
+    non_walking_error = float(
+        np.mean([run["error"] for run in runs if "walking" not in run["data"]])
+    )
 
     return {
-        "error_mean": float(np.mean([run["error"] for run in runs])),
-        "error_std": float(np.std([run["error"] for run in runs])),
+        "error_mean": (walking_error + non_walking_error) / 2,
+        "walking_error": walking_error,
+        "non_walking_error": non_walking_error,
         "runs": runs,
         "params": params,
     }
 
 
-def calibrate_algorithm(algorithm, calib_data, max_combi, nw_mult):
+def calibrate_algorithm(algorithm, calib_data, max_combi):
     """Calibrate algorithm parameters using grid search and parallel evaluation"""
     param_grid = get_param_grid(algorithm, max_combi)
     best_params = None
@@ -169,7 +162,7 @@ def calibrate_algorithm(algorithm, calib_data, max_combi, nw_mult):
     with ProcessPoolExecutor() as executor:
         # Submit all parameter combinations for evaluation
         future_to_params = {
-            executor.submit(eval_algo, algorithm, calib_data, params, nw_mult): params
+            executor.submit(eval_algo, algorithm, calib_data, params): params
             for params in param_grid
         }
 
@@ -203,21 +196,23 @@ def main():
     for algorithm in args.algorithms:
         # Mini cross-validation
         best_params1, best_error1 = calibrate_algorithm(
-            algorithm, set1_data, args.max_combi, args.nw_mult
+            algorithm, set1_data, args.max_combi
         )
-        results1 = eval_algo(algorithm, set2_data, best_params1, args.nw_mult)
+        results1 = eval_algo(algorithm, set2_data, best_params1)
         best_params2, best_error2 = calibrate_algorithm(
-            algorithm, set2_data, args.max_combi, args.nw_mult
+            algorithm, set2_data, args.max_combi
         )
-        results2 = eval_algo(algorithm, set1_data, best_params2, args.nw_mult)
+        results2 = eval_algo(algorithm, set1_data, best_params2)
 
         best_error = (best_error1 + best_error2) / 2
         error_mean = (results1["error_mean"] + results2["error_mean"]) / 2
 
         print(f"- algorithm: {algorithm}")
-        print(f"  best_param: [{best_params1}, {best_params2}]")
-        print(f"  calib_error: {best_error:.2f}")
-        print(f"  eval_error: {error_mean:.2f}")
+        print(f"  best_parameters: [{best_params1}, {best_params2}]")
+        print(f"  calibration_error: {best_error:.2f}")
+        print(f"  balanced_error: {error_mean:.2f}")
+        print(f"  walking_error: {results1['walking_error']:.2f}")
+        print(f"  non_walking_error: {results1['non_walking_error']:.2f}")
 
 
 if __name__ == "__main__":
