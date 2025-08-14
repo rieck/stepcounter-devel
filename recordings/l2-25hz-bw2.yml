@@ -1,0 +1,40 @@
+- algorithm: threshold_lp
+  best_param: [{'threshold': 29939, 'win_size': 6}, {'threshold': 32000, 'win_size': 8}]
+  calib_error: 14.00
+  eval_error: 43.40
+- algorithm: threshold_ultra
+  best_param: [{'max_step': 28, 'min_step': 4, 'threshold': 3424, 'win_hp': 6, 'win_lp': 2}, {'max_step': 7, 'min_step': 1, 'threshold': 1727, 'win_hp': 29, 'win_lp': 48}]
+  calib_error: 7.20
+  eval_error: 23.60
+- algorithm: threshold_edge
+  best_param: [{'min_step': 3, 'threshold': 26535}, {'min_step': 3, 'threshold': 26606}]
+  calib_error: 10.60
+  eval_error: 10.80
+- algorithm: threshold
+  best_param: [{'threshold': 32525}, {'threshold': 36969}]
+  calib_error: 14.80
+  eval_error: 39.40
+- algorithm: peak_detect
+  best_param: [{'bounce_win': 7, 'detect_win': 100, 'mean_win': 4, 'thres': 1.25}, {'bounce_win': 12, 'detect_win': 2, 'mean_win': 12, 'thres': 1.0}]
+  calib_error: 26.40
+  eval_error: 34.70
+- algorithm: threshold_bound
+  best_param: [{'max_step': 31, 'min_step': 9, 'threshold': 25444}, {'max_step': 38, 'min_step': 3, 'threshold': 27222}]
+  calib_error: 9.10
+  eval_error: 12.00
+- algorithm: threshold_hp8
+  best_param: [{'max_dur': 8, 'threshold': 19, 'win_size': 8}, {'max_dur': 6, 'threshold': 23, 'win_size': 8}]
+  calib_error: 13.20
+  eval_error: 16.10
+- algorithm: threshold_max
+  best_param: [{'max_step': 8, 'threshold': 31888}, {'max_step': 1, 'threshold': 34000}]
+  calib_error: 18.00
+  eval_error: 34.50
+- algorithm: threshold_hp
+  best_param: [{'threshold': 8545, 'win_size': 18}, {'threshold': 9909, 'win_size': 14}]
+  calib_error: 13.90
+  eval_error: 28.70
+- algorithm: threshold_min
+  best_param: [{'min_step': 4, 'threshold': 28727}, {'min_step': 8, 'threshold': 27313}]
+  calib_error: 9.20
+  eval_error: 15.00

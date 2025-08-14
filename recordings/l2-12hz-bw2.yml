@@ -3,9 +3,9 @@
   calib_error: 33.20
   eval_error: 65.60
 - algorithm: threshold_ultra
-  best_param: [{'max_step': 0, 'min_step': 0, 'threshold': 3000, 'win_hp': 10, 'win_lp': 1}, {'max_step': 23, 'min_step': 4, 'threshold': 1500, 'win_hp': 3, 'win_lp': 10}]
-  calib_error: 16.80
-  eval_error: 30.40
+  best_param: [{'max_step': 4, 'min_step': 0, 'threshold': 1121, 'win_hp': 23, 'win_lp': 14}, {'max_step': 15, 'min_step': 1, 'threshold': 1808, 'win_hp': 8, 'win_lp': 23}]
+  calib_error: 15.90
+  eval_error: 35.90
 - algorithm: threshold_edge
   best_param: [{'min_step': 1, 'threshold': 26606}, {'min_step': 1, 'threshold': 26323}]
   calib_error: 22.70
@@ -15,21 +15,25 @@
   calib_error: 32.60
   eval_error: 58.70
 - algorithm: peak_detect
-  best_param: [{'bounce_win': 3, 'detect_win': 100, 'mean_win': 3, 'thres': 1.08}, {'bounce_win': 3, 'detect_win': 100, 'mean_win': 31, 'thres': 1.08}]
-  calib_error: 45.80
-  eval_error: 48.50
+  best_param: [{'bounce_win': 4, 'detect_win': 100, 'mean_win': 1, 'thres': 1.0}, {'bounce_win': 4, 'detect_win': 100, 'mean_win': 7, 'thres': 1.0}]
+  calib_error: 42.30
+  eval_error: 46.20
 - algorithm: threshold_bound
-  best_param: [{'max_step': 17, 'min_step': 1, 'threshold': 26367}, {'max_step': 15, 'min_step': 3, 'threshold': 25469}]
-  calib_error: 19.60
-  eval_error: 24.80
+  best_param: [{'max_step': 17, 'min_step': 1, 'threshold': 26444}, {'max_step': 15, 'min_step': 3, 'threshold': 25444}]
+  calib_error: 19.20
+  eval_error: 25.40
+- algorithm: threshold_hp8
+  best_param: [{'max_dur': 5, 'threshold': 14, 'win_size': 4}, {'max_dur': 8, 'threshold': 13, 'win_size': 16}]
+  calib_error: 24.00
+  eval_error: 32.80
 - algorithm: threshold_max
   best_param: [{'max_step': 8, 'threshold': 33888}, {'max_step': 11, 'threshold': 30666}]
   calib_error: 31.90
   eval_error: 57.60
 - algorithm: threshold_hp
-  best_param: [{'threshold': 6868, 'win_size': 82}, {'threshold': 6373, 'win_size': 8}]
-  calib_error: 22.10
-  eval_error: 26.60
+  best_param: [{'threshold': 6818, 'win_size': 14}, {'threshold': 6727, 'win_size': 100}]
+  calib_error: 23.20
+  eval_error: 24.90
 - algorithm: threshold_min
   best_param: [{'min_step': 3, 'threshold': 27666}, {'min_step': 3, 'threshold': 26181}]
   calib_error: 15.90
