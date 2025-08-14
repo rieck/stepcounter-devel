@@ -1,0 +1,31 @@
+{
+    "set1": [
+        "fast-walking1.csv",
+        "fast-walking2.csv",        
+        "normal-walking1.csv",
+        "normal-walking2.csv",        
+        "slow-walking1.csv",
+        "slow-walking2.csv",        
+        "pc-working1.csv",
+        "pc-working2.csv",
+        "pc-working5.csv",
+        "pc-working6.csv",
+        "desk-working1.csv",
+        "desk-working2.csv"
+    ],
+    "set2": [
+        "fast-walking3.csv",
+        "fast-walking4.csv",        
+        "normal-walking3.csv",
+        "normal-walking4.csv",        
+        "slow-walking3.csv",
+        "slow-walking4.csv",        
+        "pc-working3.csv",
+        "pc-working4.csv",
+        "pc-working7.csv",
+        "pc-working8.csv",
+        "desk-working3.csv",
+        "desk-working4.csv"
+
+    ]
+}
