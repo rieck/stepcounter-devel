@@ -72,8 +72,8 @@ apples-to-apples on identical input.
 
 - `threshold_bound_n`
   This project's `algorithms/threshold-boundn.py`, ported to C.
-  Generalizes `bound8` to require a run of *N* consecutive rhythmic steps,
-  tracked with a single run-length counter (no history buffer).
+  Generalizes `bound8` to require a streak of *N* consecutive rhythmic
+  steps, tracked with a single streak-length counter (no history buffer).
 
 ### Build & Run
 

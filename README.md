@@ -53,50 +53,92 @@ The `calibrate.py` tool performs grid search over parameter spaces to find optim
 
 ```bash
 # Calibrate a single algorithm
-python calibrate.py threshold-bound
+python calibrate.py threshold_bound
 
 # Calibrate all available algorithms
 python calibrate.py all
 
 # Use custom data directory
-python calibrate.py -d recordings/l2-25hz threshold
+python calibrate.py -d recordings/l2-25hz-bw2 threshold
 ```
 
 #### Algorithms Available
 
 - `threshold` - Basic threshold-based detection
-- `threshold-lp` - Threshold with low-pass filtering
-- `threshold-hp` - Threshold with high-pass filtering
-- `threshold-min/max` - Threshold with step time bounds
-- `threshold-bound` - Threshold with min and max bounds
-- `threshold-ultra` - Threshold with all of the above
-- `peak-detect` - Classic peak detection
+- `threshold_lp` - Threshold with low-pass filter
+- `threshold_hp` - Threshold with high-pass filter
+- `threshold_hp8` - High-pass filter with edge detection (8-bit magnitude)
+- `threshold_min` - Threshold with minimum step size (refractory gap)
+- `threshold_min8` - Minimum step size (8-bit magnitude)
+- `threshold_max` - Threshold with maximum step size
+- `threshold_bound` - Bounded step size (min and max) with edge detection
+- `threshold_bound8` - Bounded step size with edge detection (8-bit magnitude)
+- `threshold_bound_n` - Bounded detector requiring a streak of N rhythmic steps
+- `threshold_edge` - Minimum step size with edge detection
+- `peak_detect` - Classic peak detection
+- `espruino` - Espruino / gfwilliams state-machine pedometer
+- `adaptive` - Adaptive-threshold detector (voloved's `count_steps_simple`)
 
 #### Calibration Results
 
-| Algorithm | Calibration Error | Evaluation Error | Best Params 1 | Best Params 2 |
-|-----------|------------------|------------------|---------------|---------------|
-| **threshold_hp** | 23.10 | **23.40** | `{'threshold': 6727, 'win_size': 100}` | `{'threshold': 6515, 'win_size': 7}` |
-| **threshold_edge** | 22.70 | **24.20** | `{'min_step': 1, 'threshold': 26606}` | `{'min_step': 1, 'threshold': 26323}` |
-| **threshold_bound** | 19.50 | **24.50** | `{'max_step': 18, 'min_step': 1, 'threshold': 26444}` | `{'max_step': 15, 'min_step': 3, 'threshold': 25666}` |
-| **threshold_min** | 15.90 | **29.50** | `{'min_step': 3, 'threshold': 27666}` | `{'min_step': 3, 'threshold': 26181}` |
-| **threshold_ultra** | 14.70 | **31.50** | `{'max_step': 12, 'min_step': 2, 'threshold': 2454, 'win_hp': 4, 'win_lp': 18}` | `{'max_step': 16, 'min_step': 4, 'threshold': 1161, 'win_hp': 4, 'win_lp': 6}` |
-| **peak_detect** | 42.30 | **46.20** | `{'bounce_win': 4, 'detect_win': 100, 'mean_win': 1, 'thres': 1.0}` | `{'bounce_win': 4, 'detect_win': 100, 'mean_win': 7, 'thres': 1.0}` |
-| **threshold_max** | 31.90 | **57.60** | `{'max_step': 8, 'threshold': 33888}` | `{'max_step': 11, 'threshold': 30666}` |
-| **threshold** | 32.60 | **58.70** | `{'threshold': 34545}` | `{'threshold': 31111}` |
-| **threshold_lp** | 33.20 | **65.60** | `{'threshold': 31636, 'win_size': 4}` | `{'threshold': 31030, 'win_size': 1}` |
+The table below compares the balanced error (lower is better) of every
+algorithm across all recording sets, as produced by `summary.py`. The
+balanced error weights the walking (step-count) error against false steps
+detected during non-walking activity.
 
-Calibration results are stored in [`results.yml`](results.yml).
+| Algorithm | l1-12hz-bw2 | l2-12hz-bw2 | l2-25hz-bw2 | l2-25hz-bw4 | Mean |
+|-----------|------------:|------------:|------------:|------------:|-----:|
+| **threshold_bound_n** | 22.50 | 13.58 | 12.75 | 9.25 | **14.52** |
+| espruino | 17.79 | 30.46 | 16.71 | 15.08 | 20.01 |
+| threshold_bound | 24.83 | 28.42 | 16.62 | 17.38 | 21.81 |
+| threshold_min | 28.00 | 30.25 | 17.54 | 16.50 | 23.07 |
+| threshold_edge | 30.29 | 28.71 | 13.50 | 21.46 | 23.49 |
+| threshold_hp8 | 36.08 | 35.79 | 15.67 | 17.83 | 26.34 |
+| threshold_hp | 38.96 | 25.21 | 23.96 | 18.88 | 26.75 |
+| threshold_min8 | 48.46 | 30.92 | 14.54 | 14.17 | 27.02 |
+| threshold_bound8 | 50.96 | 39.71 | 13.58 | 11.08 | 28.83 |
+| threshold | 61.79 | 51.00 | 34.25 | 32.00 | 44.76 |
+| peak_detect | 64.08 | 50.50 | 30.58 | 35.12 | 45.07 |
+| threshold_max | 61.83 | 49.04 | 29.96 | 63.92 | 51.19 |
+| threshold_lp | 89.21 | 56.38 | 37.08 | 89.00 | 67.92 |
+| adaptive | 87.71 | 78.38 | 68.08 | 64.29 | 74.61 |
+
+Per-set calibration results are stored in [`recordings/`](recordings/) as
+one `<set>.yml` file per recording set. Regenerate this comparison with:
+
+```bash
+# Balanced error across all sets (as shown above)
+python summary.py
+
+# Choose a different metric, or use relative (percentage) errors
+python summary.py -m walking_error
+python summary.py --relative
+```
 
 ## Runtime Analysis
 
-The `runtime/` directory contains code snippets for measuring the performance of mathematical operations on device.
+The `runtime/` directory contains two benchmarks for measuring on-device
+performance: a math benchmark for the low-level operations used by the
+detectors, and a step-detector benchmark comparing whole algorithms.
 
-#### Available Functions
+### Math Benchmark
+
+[`math_bench.c`](runtime/math_bench.c) times the primitive operations used
+by step-counting algorithms.
 
 - **Absolute Value Functions**: Different implementations based on integer and floating-point code.
 - **Norm Functions**: Different implementations, e.g., L1 (Manhattan), L2 (Euclidean) norms.
 
-#### Runtime Results
+Benchmarks show that integer operations significantly outperform floating-point calculations on device (No surprise, the ARM Cortex M0+ does not have a FP unit). The L1 norm executes approximately 40 times faster than the L2 norm. An approximate L2 norm calculation provides an effective compromise between computational performance and accuracy for the step detection use case.
 
-Benchmarks show that integer operations significantly outperform floating-point calculations on device (No surprise, the ARM Cortex M0+ does not have a FP unit). The L1 norm executes approximately 40 times faster than the L2 norm. An approximate L2 norm calculation provides an effective compromise between computational performance and accuracy for the step detection use case. See [`runtime/README.md`](runtime/README.md) for detailed results.
+### Step-Detector Benchmark
+
+[`step_bench.c`](runtime/step_bench.c) compares the per-sample cost of
+three streaming detectors on an identical walking-like magnitude stream.
+`threshold_bound_n` is the cheapest (clamp/shift/compare/increment on
+non-step samples), `threshold_bound8` is ~4x slower (it runs its
+bounded-gap check on every sample), and `espruino` is ~13x the cost of
+`bound_n`, dominated by its per-sample FIR and DC filter.
+
+See [`runtime/README.md`](runtime/README.md) for the full function
+descriptions, build instructions, and detailed timing results.

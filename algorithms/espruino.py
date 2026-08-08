@@ -12,7 +12,15 @@ The original constants are tuned for 12.5 Hz and a 4 g range. Our recordings
 are 25 Hz / +-2 g, so the input scale (out_shift), sensitivity (raw_threshold)
 and timing bounds are exposed as parameters for the grid search to fit.
 
-Copyright (c) 2025 Konrad Rieck. MIT License
+The step-counting algorithm originates in Espruino (libs/misc/stepcount.c),
+Copyright (c) 2021 Gordon Williams <gw@pur3.co.uk>, and is licensed under the
+Mozilla Public License, v. 2.0. This Python port (Copyright (c) 2026 Konrad
+Rieck) is a derivative work and therefore remains under the MPL-2.0, not the
+MIT license used by the rest of this repository.
+
+This Source Code Form is subject to the terms of the Mozilla Public License,
+v. 2.0. If a copy of the MPL was not distributed with this file, You can
+obtain one at http://mozilla.org/MPL/2.0/.
 """
 
 from .base import BaseDetector

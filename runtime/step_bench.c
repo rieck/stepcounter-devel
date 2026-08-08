@@ -8,7 +8,7 @@
  *   - espruino           voloved/second-movement PR #191
  *                        (COUNT_STEPS_USE_ESPRUINO): DC-removal EMA +
  *                        7-tap FIR + activity gate + peak + state machine
- *   - threshold_bound_n  generalization of bound8 requiring a run of N
+ *   - threshold_bound_n  generalization of bound8 requiring a streak of N
  *                        consecutive rhythmic steps
  *
  * All three are fed the SAME magnitude stream (a walking-like signal,
@@ -22,7 +22,17 @@
  *
  * Build:  cc -O2 -o step_bench step_bench.c -lm
  *
- * Copyright (c) 2025 Konrad Rieck. MIT License
+ * Copyright (c) 2025 Konrad Rieck. MIT License, EXCEPT for the espruino
+ * detector below (the espruino_* functions and their constants), which is a
+ * port of Espruino's libs/misc/stepcount.c, Copyright (c) 2021 Gordon
+ * Williams <gw@pur3.co.uk>, and is licensed under the Mozilla Public
+ * License, v. 2.0. Because that MPL-2.0 code is combined into this file, the
+ * file as a whole is distributed under the terms of the MPL-2.0; see the
+ * per-section notice below and LICENSE.MPL for details.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
 #include <math.h>
@@ -108,6 +118,12 @@ static void bound8_sample(bound8_state_t *s, uint32_t mag)
 
 /* ================================================================= *
  *  2) espruino  (count_steps.c::count_steps_espruino_sample)
+ *
+ *  Ported from Espruino's libs/misc/stepcount.c (via voloved/second-
+ *  movement PR #191), Copyright (c) 2021 Gordon Williams <gw@pur3.co.uk>.
+ *  This C port Copyright (c) 2026 Konrad Rieck. Licensed under the Mozilla
+ *  Public License, v. 2.0 -- see the file header and LICENSE.MPL. This
+ *  section is MPL-covered, not MIT.
  * ================================================================= */
 
 #define ACCELFILTER_TAP_NUM 7
@@ -235,13 +251,13 @@ static void espruino_sample(espruino_state_t *s, uint32_t accMag)
 #define BN_THRESHOLD 100
 #define BN_MIN_STEP  10
 #define BN_MAX_STEP  20
-#define BN_MIN_RUN   6
+#define BN_MIN_STREAK   6
 
 typedef struct {
-    int32_t  steps;      /* signed: a short run is subtracted back out */
+    int32_t  steps;      /* signed: a short streak is subtracted back out */
     uint32_t index;      /* running sample index */
     uint32_t last_step;
-    int32_t  run_len;
+    int32_t  streak_len;
     int      have_step;
 } boundn_state_t;
 
@@ -250,7 +266,7 @@ static void boundn_init(boundn_state_t *s)
     s->steps = 0;
     s->index = 0;
     s->last_step = 0;
-    s->run_len = 0;
+    s->streak_len = 0;
     s->have_step = 0;
 }
 
@@ -262,11 +278,11 @@ static void boundn_sample(boundn_state_t *s, uint32_t mag)
     if (mag > BN_THRESHOLD) {
         if (!s->have_step || s->index - s->last_step >= BN_MIN_STEP) {
             if (s->have_step && s->index - s->last_step <= BN_MAX_STEP) {
-                s->run_len++;                       /* continues the run */
+                s->streak_len++;                       /* continues the streak */
             } else {
-                if (s->run_len < BN_MIN_RUN)        /* drop a short run */
-                    s->steps -= s->run_len;
-                s->run_len = 1;
+                if (s->streak_len < BN_MIN_STREAK)        /* drop a short streak */
+                    s->steps -= s->streak_len;
+                s->streak_len = 1;
             }
             s->steps++;
             s->last_step = s->index;
@@ -276,12 +292,12 @@ static void boundn_sample(boundn_state_t *s, uint32_t mag)
     s->index += 1;
 }
 
-/* boundn_sample leaves a trailing run pending; flush at end of a stream. */
+/* boundn_sample leaves a trailing streak pending; flush at end of a stream. */
 static void boundn_flush(boundn_state_t *s)
 {
-    if (s->run_len < BN_MIN_RUN)
-        s->steps -= s->run_len;
-    s->run_len = 0;
+    if (s->streak_len < BN_MIN_STREAK)
+        s->steps -= s->streak_len;
+    s->streak_len = 0;
 }
 
 /* ================================================================= *
