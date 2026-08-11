@@ -42,7 +42,7 @@ class ThresholdBound8(BaseDetector):
     @classmethod
     def get_param_grid(cls):
         return {
-            "threshold": [100],  # np.linspace(50, 150, 100).astype(int),
-            "max_step": [20],  # np.linspace(1, 40, 40).astype(int),
-            "min_step": [10],  # np.linspace(1, 10, 10).astype(int),
+            "threshold": list(range(50, 151, 2)),  # 8-bit detection threshold
+            "max_step": list(range(1, 41)),  # max gap between steps
+            "min_step": list(range(1, 17)),  # min gap (refractory) between steps
         }

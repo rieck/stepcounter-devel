@@ -109,10 +109,10 @@ def get_param_grid(algo_name, max_combi):
     # Convert numpy types to native Python types
     converted_grid = []
     for params in ParameterGrid(param_grid):
-        # Skip degenerate combos where the max gap is below the min gap:
-        # no step can ever fall within the rhythmic window.
+        # Skip degenerate combos where the max gap does not exceed the min
+        # gap: no step can ever fall within the rhythmic window.
         if "min_step" in params and "max_step" in params:
-            if params["max_step"] < params["min_step"]:
+            if params["max_step"] <= params["min_step"]:
                 continue
         converted_params = convert_numpy_types(params)
         converted_grid.append(converted_params)

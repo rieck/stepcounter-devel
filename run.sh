@@ -5,5 +5,5 @@
 
 for i in l1-12hz-bw2 l2-12hz-bw2 l2-25hz-bw2 l2-25hz-bw4 ; do
     echo "$i"
-    ./calibrate.py -d "recordings/$i" all > "recordings/$i.yml"
+    ./calibrate.py -c 50000 -d "recordings/$i" all > "recordings/$i.yml"
 done
