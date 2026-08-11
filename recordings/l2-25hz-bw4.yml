@@ -1,0 +1,96 @@
+- algorithm: threshold_lp
+  best_parameters: [{'threshold': 32000, 'win_size': 100}, {'threshold': 32000, 'win_size': 5}]
+  calibration_error: 82.88
+  balanced_error: 89.00
+  walking_error: 144.50
+  non_walking_error: 0.00
+- algorithm: threshold_bound_n
+  best_parameters: [{'max_step': 29, 'min_step': 10, 'min_streak': 7, 'threshold': 96}, {'max_step': 37, 'min_step': 10, 'min_streak': 9, 'threshold': 96}]
+  calibration_error: 5.00
+  balanced_error: 9.46
+  walking_error: 14.50
+  non_walking_error: 1.33
+- algorithm: threshold_edge
+  best_parameters: [{'min_step': 4, 'threshold': 28161}, {'min_step': 1, 'threshold': 26818}]
+  calibration_error: 18.29
+  balanced_error: 21.46
+  walking_error: 34.00
+  non_walking_error: 8.33
+- algorithm: threshold
+  best_parameters: [{'threshold': 40000}, {'threshold': 40000}]
+  calibration_error: 32.00
+  balanced_error: 32.00
+  walking_error: 72.00
+  non_walking_error: 0.67
+- algorithm: espruino
+  best_parameters: [{'out_shift': 8, 'raw_threshold': 15, 't_max_step': 24, 't_min_step': 4}, {'out_shift': 8, 'raw_threshold': 15, 't_max_step': 32, 't_min_step': 4}]
+  calibration_error: 11.75
+  balanced_error: 15.08
+  walking_error: 21.50
+  non_walking_error: 3.83
+- algorithm: threshold_bound_n2
+  best_parameters: [{'max_step': 29, 'min_step': 2, 'min_streak': 10, 'threshold': 106}, {'max_step': 39, 'min_step': 2, 'min_streak': 10, 'threshold': 98}]
+  calibration_error: 13.58
+  balanced_error: 22.38
+  walking_error: 43.67
+  non_walking_error: 0.00
+- algorithm: threshold_bound_n3
+  best_parameters: [{'max_step': 40, 'min_step': 2, 'min_streak': 4, 'threshold': 108}, {'max_step': 39, 'min_step': 2, 'min_streak': 5, 'threshold': 102}]
+  calibration_error: 15.92
+  balanced_error: 19.54
+  walking_error: 35.33
+  non_walking_error: 2.50
+- algorithm: adaptive
+  best_parameters: [{'batch_size': 25, 'max_fifo_size': 13, 'samp_ignore': 5, 'threshold_mult': 1.75}, {'batch_size': 25, 'max_fifo_size': 13, 'samp_ignore': 5, 'threshold_mult': 1.75}]
+  calibration_error: 64.29
+  balanced_error: 64.29
+  walking_error: 32.17
+  non_walking_error: 92.50
+- algorithm: peak_detect
+  best_parameters: [{'bounce_win': 7, 'detect_win': 100, 'mean_win': 1, 'thres': 1.1666666667}, {'bounce_win': 7, 'detect_win': 100, 'mean_win': 2, 'thres': 1.1666666667}]
+  calibration_error: 33.71
+  balanced_error: 35.12
+  walking_error: 16.83
+  non_walking_error: 46.00
+- algorithm: threshold_bound
+  best_parameters: [{'max_step': 20, 'min_step': 10, 'threshold': 25555}, {'max_step': 16, 'min_step': 9, 'threshold': 25000}]
+  calibration_error: 10.00
+  balanced_error: 13.29
+  walking_error: 14.17
+  non_walking_error: 7.50
+- algorithm: threshold_hp8
+  best_parameters: [{'max_dur': 10, 'threshold': 15, 'win_size': 8}, {'max_dur': 10, 'threshold': 15, 'win_size': 16}]
+  calibration_error: 16.50
+  balanced_error: 17.83
+  walking_error: 12.67
+  non_walking_error: 19.83
+- algorithm: threshold_min8
+  best_parameters: [{'min_step': 10, 'threshold': 100}, {'min_step': 10, 'threshold': 100}]
+  calibration_error: 14.17
+  balanced_error: 14.17
+  walking_error: 11.67
+  non_walking_error: 15.17
+- algorithm: threshold_max
+  best_parameters: [{'max_step': 1, 'threshold': 34000}, {'max_step': 1, 'threshold': 34000}]
+  calibration_error: 63.92
+  balanced_error: 63.92
+  walking_error: 100.33
+  non_walking_error: 2.67
+- algorithm: threshold_bound8
+  best_parameters: [{'max_step': 20, 'min_step': 10, 'threshold': 100}, {'max_step': 16, 'min_step': 9, 'threshold': 96}]
+  calibration_error: 10.38
+  balanced_error: 14.08
+  walking_error: 16.83
+  non_walking_error: 6.00
+- algorithm: threshold_hp
+  best_parameters: [{'threshold': 9000, 'win_size': 11}, {'threshold': 7727, 'win_size': 11}]
+  calibration_error: 13.04
+  balanced_error: 18.88
+  walking_error: 27.83
+  non_walking_error: 6.50
+- algorithm: threshold_min
+  best_parameters: [{'min_step': 9, 'threshold': 28161}, {'min_step': 8, 'threshold': 26818}]
+  calibration_error: 12.75
+  balanced_error: 16.46
+  walking_error: 26.67
+  non_walking_error: 8.00

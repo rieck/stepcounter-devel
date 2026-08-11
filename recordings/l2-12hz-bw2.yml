@@ -1,26 +1,20 @@
-- algorithm: peak_detect
-  best_parameters: [{'bounce_win': 4, 'detect_win': 100, 'mean_win': 1, 'thres': 1.0}, {'bounce_win': 4, 'detect_win': 100, 'mean_win': 35, 'thres': 1.0833333333}]
-  calibration_error: 46.75
-  balanced_error: 50.50
-  walking_error: 20.33
-  non_walking_error: 69.50
-- algorithm: threshold_max
-  best_parameters: [{'max_step': 8, 'threshold': 33888}, {'max_step': 11, 'threshold': 30666}]
-  calibration_error: 27.46
-  balanced_error: 49.04
-  walking_error: 102.00
-  non_walking_error: 0.00
 - algorithm: threshold_lp
   best_parameters: [{'threshold': 31636, 'win_size': 4}, {'threshold': 31030, 'win_size': 1}]
   calibration_error: 28.92
   balanced_error: 56.38
   walking_error: 129.00
   non_walking_error: 0.00
-- algorithm: threshold_hp
-  best_parameters: [{'threshold': 7272, 'win_size': 78}, {'threshold': 6727, 'win_size': 100}]
-  calibration_error: 23.62
-  balanced_error: 25.21
-  walking_error: 34.00
+- algorithm: threshold_bound_n
+  best_parameters: [{'max_step': 36, 'min_step': 4, 'min_streak': 10, 'threshold': 102}, {'max_step': 17, 'min_step': 3, 'min_streak': 7, 'threshold': 98}]
+  calibration_error: 6.58
+  balanced_error: 23.08
+  walking_error: 27.33
+  non_walking_error: 0.00
+- algorithm: threshold_edge
+  best_parameters: [{'min_step': 1, 'threshold': 27666}, {'min_step': 1, 'threshold': 26323}]
+  calibration_error: 23.67
+  balanced_error: 28.71
+  walking_error: 33.33
   non_walking_error: 23.00
 - algorithm: threshold
   best_parameters: [{'threshold': 34545}, {'threshold': 31111}]
@@ -28,57 +22,75 @@
   balanced_error: 51.00
   walking_error: 104.67
   non_walking_error: 5.50
-- algorithm: adaptive
-  best_parameters: [{'batch_size': 25, 'max_fifo_size': 13, 'samp_ignore': 5, 'threshold_mult': 1.75}, {'batch_size': 25, 'max_fifo_size': 13, 'samp_ignore': 5, 'threshold_mult': 1.75}]
-  calibration_error: 78.38
-  balanced_error: 78.38
-  walking_error: 59.33
-  non_walking_error: 96.00
-- algorithm: threshold_edge
-  best_parameters: [{'min_step': 1, 'threshold': 27666}, {'min_step': 1, 'threshold': 26323}]
-  calibration_error: 23.67
-  balanced_error: 28.71
-  walking_error: 33.33
-  non_walking_error: 23.00
-- algorithm: threshold_hp8
-  best_parameters: [{'max_dur': 5, 'threshold': 14, 'win_size': 4}, {'max_dur': 4, 'threshold': 13, 'win_size': 16}]
-  calibration_error: 27.21
-  balanced_error: 35.79
-  walking_error: 21.00
-  non_walking_error: 41.00
-- algorithm: threshold_bound
-  best_parameters: [{'max_step': 19, 'min_step': 3, 'threshold': 27666}, {'max_step': 19, 'min_step': 3, 'threshold': 26111}]
-  calibration_error: 15.04
-  balanced_error: 28.42
-  walking_error: 34.33
-  non_walking_error: 14.50
 - algorithm: espruino
   best_parameters: [{'out_shift': 8, 'raw_threshold': 15, 't_max_step': 32, 't_min_step': 4}, {'out_shift': 6, 'raw_threshold': 40, 't_max_step': 16, 't_min_step': 4}]
   calibration_error: 19.04
   balanced_error: 30.46
   walking_error: 37.67
   non_walking_error: 7.00
-- algorithm: threshold_bound_n
-  best_parameters: [{'max_step': 40, 'min_run': 8, 'min_step': 4, 'threshold': 100}, {'max_step': 20, 'min_run': 6, 'min_step': 4, 'threshold': 100}]
-  calibration_error: 11.25
-  balanced_error: 13.58
-  walking_error: 15.33
-  non_walking_error: 7.50
-- algorithm: threshold_min
-  best_parameters: [{'min_step': 3, 'threshold': 27666}, {'min_step': 3, 'threshold': 26181}]
-  calibration_error: 17.92
-  balanced_error: 30.25
-  walking_error: 30.33
-  non_walking_error: 22.50
-- algorithm: threshold_bound8
-  best_parameters: [{'max_step': 20, 'min_step': 10, 'threshold': 100}, {'max_step': 20, 'min_step': 10, 'threshold': 100}]
-  calibration_error: 39.71
-  balanced_error: 39.71
-  walking_error: 56.33
-  non_walking_error: 16.50
+- algorithm: threshold_bound_n2
+  best_parameters: [{'max_step': 35, 'min_step': 2, 'min_streak': 10, 'threshold': 102}, {'max_step': 26, 'min_step': 2, 'min_streak': 9, 'threshold': 98}]
+  calibration_error: 10.08
+  balanced_error: 18.71
+  walking_error: 24.00
+  non_walking_error: 0.00
+- algorithm: threshold_bound_n3
+  best_parameters: [{'max_step': 38, 'min_step': 2, 'min_streak': 10, 'threshold': 102}, {'max_step': 19, 'min_step': 2, 'min_streak': 6, 'threshold': 98}]
+  calibration_error: 10.37
+  balanced_error: 19.71
+  walking_error: 24.00
+  non_walking_error: 0.00
+- algorithm: adaptive
+  best_parameters: [{'batch_size': 25, 'max_fifo_size': 13, 'samp_ignore': 5, 'threshold_mult': 1.75}, {'batch_size': 25, 'max_fifo_size': 13, 'samp_ignore': 5, 'threshold_mult': 1.75}]
+  calibration_error: 78.38
+  balanced_error: 78.38
+  walking_error: 59.33
+  non_walking_error: 96.00
+- algorithm: peak_detect
+  best_parameters: [{'bounce_win': 4, 'detect_win': 100, 'mean_win': 1, 'thres': 1.0}, {'bounce_win': 4, 'detect_win': 100, 'mean_win': 35, 'thres': 1.0833333333}]
+  calibration_error: 46.75
+  balanced_error: 50.50
+  walking_error: 20.33
+  non_walking_error: 69.50
+- algorithm: threshold_bound
+  best_parameters: [{'max_step': 20, 'min_step': 3, 'threshold': 27666}, {'max_step': 18, 'min_step': 3, 'threshold': 26111}]
+  calibration_error: 14.88
+  balanced_error: 28.12
+  walking_error: 34.00
+  non_walking_error: 15.00
+- algorithm: threshold_hp8
+  best_parameters: [{'max_dur': 5, 'threshold': 14, 'win_size': 4}, {'max_dur': 4, 'threshold': 13, 'win_size': 16}]
+  calibration_error: 27.21
+  balanced_error: 35.79
+  walking_error: 21.00
+  non_walking_error: 41.00
 - algorithm: threshold_min8
   best_parameters: [{'min_step': 4, 'threshold': 100}, {'min_step': 3, 'threshold': 100}]
   calibration_error: 22.92
   balanced_error: 30.92
   walking_error: 11.67
   non_walking_error: 34.50
+- algorithm: threshold_max
+  best_parameters: [{'max_step': 8, 'threshold': 33888}, {'max_step': 11, 'threshold': 30666}]
+  calibration_error: 27.46
+  balanced_error: 49.04
+  walking_error: 102.00
+  non_walking_error: 0.00
+- algorithm: threshold_bound8
+  best_parameters: [{'max_step': 36, 'min_step': 3, 'threshold': 108}, {'max_step': 19, 'min_step': 3, 'threshold': 102}]
+  calibration_error: 16.00
+  balanced_error: 26.25
+  walking_error: 34.00
+  non_walking_error: 15.00
+- algorithm: threshold_hp
+  best_parameters: [{'threshold': 7272, 'win_size': 78}, {'threshold': 6727, 'win_size': 100}]
+  calibration_error: 23.62
+  balanced_error: 25.21
+  walking_error: 34.00
+  non_walking_error: 23.00
+- algorithm: threshold_min
+  best_parameters: [{'min_step': 3, 'threshold': 27666}, {'min_step': 3, 'threshold': 26181}]
+  calibration_error: 17.92
+  balanced_error: 30.25
+  walking_error: 30.33
+  non_walking_error: 22.50
