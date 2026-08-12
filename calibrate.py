@@ -133,6 +133,17 @@ def get_param_grid(algo_name, max_combi, seed=0):
     return converted_grid
 
 
+CATEGORIES = ("fast", "normal", "slow", "non-walking")
+
+
+def categorize(fname):
+    """Category of a recording, derived from its file name"""
+    for speed in ("fast", "normal", "slow"):
+        if fname.startswith(f"{speed}-walking"):
+            return speed
+    return "non-walking"
+
+
 def eval_algo(algo_name, data, params):
     """Evaluate the algorithm on the data with the given parameters"""
     detector_class = detectors[algo_name]
@@ -141,12 +152,23 @@ def eval_algo(algo_name, data, params):
     runs = []
     for mag_series, true_steps, fname in data:
         steps = detector.detect_steps(mag_series)
+        walking = "walking" in fname
+
+        # Non-walking recordings measure how much a detector fires when it
+        # should not, so only over-prediction counts. Some of them (dishwasher,
+        # dressing) contain a few real steps; scoring them with the absolute
+        # error would penalise missing those steps here as well and pull the
+        # search towards counting steps in exactly the recordings meant to
+        # test the opposite.
+        error = abs(steps - true_steps) if walking else max(0, steps - true_steps)
+
         runs.append(
             {
                 "data": fname,
+                "category": categorize(fname),
                 "steps": true_steps,
                 "predicted": steps,
-                "error": abs(steps - true_steps),
+                "error": error,
             }
         )
 
@@ -157,10 +179,19 @@ def eval_algo(algo_name, data, params):
         np.mean([run["error"] for run in runs if "walking" not in run["data"]])
     )
 
+    # Per-category errors. Walking speeds are reported separately: a detector
+    # tuned to reject hand motion tends to lose slow walking first, and the
+    # aggregate walking error hides which end of the cadence range suffers.
+    category_error = {}
+    for cat in CATEGORIES:
+        errors = [run["error"] for run in runs if run["category"] == cat]
+        category_error[cat] = float(np.mean(errors)) if errors else float("nan")
+
     return {
         "error_mean": (walking_error + non_walking_error) / 2,
         "walking_error": walking_error,
         "non_walking_error": non_walking_error,
+        "category_error": category_error,
         "runs": runs,
         "params": params,
     }
@@ -221,12 +252,21 @@ def main():
         best_error = (best_error1 + best_error2) / 2
         error_mean = (results1["error_mean"] + results2["error_mean"]) / 2
 
+        # Average both cross-validation directions, so every reported error
+        # covers all recordings rather than one half of the split.
+        def both(key):
+            return (results1[key] + results2[key]) / 2
+
         print(f"- algorithm: {algorithm}")
         print(f"  best_parameters: [{best_params1}, {best_params2}]")
         print(f"  calibration_error: {best_error:.2f}")
         print(f"  balanced_error: {error_mean:.2f}")
-        print(f"  walking_error: {results1['walking_error']:.2f}")
-        print(f"  non_walking_error: {results1['non_walking_error']:.2f}")
+        print(f"  walking_error: {both('walking_error'):.2f}")
+        for cat in CATEGORIES:
+            cat_error = (
+                results1["category_error"][cat] + results2["category_error"][cat]
+            ) / 2
+            print(f"  {cat.replace('-', '_')}_error: {cat_error:.2f}")
 
 
 if __name__ == "__main__":
